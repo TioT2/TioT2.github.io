@@ -1,0 +1,10 @@
+{
+  "configurations": [
+      {
+          "name": "Open index.html",
+          "type": "chrome",
+          "request": "launch",
+          "url": "http://localhost:8080",
+      }
+  ]
+}
