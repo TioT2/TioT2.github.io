@@ -1,0 +1,43 @@
+:root {
+  color: #4C77CC;
+}
+
+.header {
+  color       : var(--color);
+  font-weight : bold;
+  font-size   : xx-large;
+  font-family : 'Consolas';
+}
+
+
+#mainData {
+  display: flex;
+  margin-top: 5px;
+}
+
+#glCanvas {
+  border: 12px ridge #4C77CC;
+  align-self: stretch;
+  margin-right: 5px;
+}
+
+.block {
+  display:flex;
+  vertical-align:top;
+  border: 12px ridge #4C77CC;
+  margin-right: 5px;
+}
+
+.typeOption {
+  color       : var(--color);
+  font-weight : medium;
+  font-size   : smaller;
+  font-family : 'Consolas';
+}
+
+.text {
+  color       : var(--color);
+  font-weight : bolder;
+  font-size   : medium;
+  font-family : 'Consolas';
+}

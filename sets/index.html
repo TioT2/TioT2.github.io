@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <meta charset="UTF_8"/>
+    <title>WebGL test</title>
+    <link rel="stylesheet" href="./styles.css"/>
+  </head>
+
+  <body id="body">
+    <div style="display:flex;">
+      <div class="block">
+        <h1 id="heading" class="header">The Mandelbrot set</h1>
+      </div>
+
+      <div class="block">
+        <form id="setParameters">
+          <t class="text">Color: </t>
+          <input type="color" id="setColorPicker" value="#FFBF0E">
+          <br/>
+      
+          <t class="text">Bloom coefficent: </t>
+          <input type="range" id="setColorCoefficent" min="1" max="8" value="8" step="0.02">
+          <br/>
+      
+          <t class="text">Set: </t>
+          <select id="setTypeSelector" class="text">
+            <option class="typeOption">Mandelbrot</option>
+            <option class="typeOption">Julia</option>
+          </select>
+          <br/>
+        </form>
+
+        <div id="juliaCoefficents">
+          <t class="text">Julia set 'C' coefficent: </t>
+          <div id="realBlock" style="margin-left: 16px">
+            <input id="real" type="range" min="-2" max="2" step="0.02">
+            <t class="text">Real</t>
+          </div>
+          
+          <div id="imaginaryBlock" style="margin-left: 16px">
+            <input id="imaginary" type="range" min="-2" max="2" step="0.02">
+            <t class="text">Imaginary</t>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="mainData">
+      <canvas id="glCanvas" width="800" height="600"></canvas>
+      <t class="block" style="display:unset">
+        <div class="header">Description</div>
+        This fractals are based on <br>
+        complex numbers which are<br>
+        very useful shit in real maths,<br>
+        but we are little-aged idiots<br>
+        (from russian "малолетний дебил")<br>
+        so we're using theese numbers for<br>
+        this only...
+      </t>
+    </div>
+
+    <script type="module">
+      import {init} from "./main.js";
+      init();
+    </script>
+
+  </body>
+</html>
