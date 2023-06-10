@@ -33,10 +33,10 @@ export class System {
   run() {
     let system = this;
 
-    const run = function() {
+    const run = async function() {
       system.timer.response();
 
-      system.render.start();
+      await system.render.start();
 
       for (let i = 0, count = system.units.length; i < count; i++) {
         system.units[i].response(system);

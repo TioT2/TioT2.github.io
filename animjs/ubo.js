@@ -3,7 +3,7 @@ export class UBO {
   buffer;
   isEmpty = true;
 
-  constructor(gl, name) {
+  constructor(gl) {
     this.gl = gl;
     this.buffer = gl.createBuffer();
   } /* constructor */

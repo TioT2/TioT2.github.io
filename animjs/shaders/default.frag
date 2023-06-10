@@ -2,17 +2,18 @@
 
 precision highp float;
 
-out vec4 outColor;
+layout(location = 0) out vec4 outPosition;
+layout(location = 1) out vec4 outNormalShade;
+layout(location = 2) out vec4 outDiffuse;
 
 in vec3 drawPosition;
 in vec2 drawTexCoord;
 in vec3 drawNormal;
 
-uniform sampler2D diffuseTexture;
+uniform sampler2D Texture0;
 
 void main() {
-  vec3 L = normalize(vec3(1));
-  vec3 diffuseColor = texture(diffuseTexture, drawTexCoord * vec2(1, -1)).xyz;
-
-  outColor = vec4(diffuseColor * clamp(dot(drawNormal, L), 0.1, 1.0), 1);
+  outPosition = vec4(drawPosition, 1);
+  outNormalShade = vec4(drawNormal, 1);
+  outDiffuse = texture(Texture0, drawTexCoord * vec2(1, -1));
 }

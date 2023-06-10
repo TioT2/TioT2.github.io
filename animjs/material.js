@@ -23,6 +23,6 @@ export class Material {
     if (this.ubo != null)
       this.ubo.bind(this.shader, 0, this.uboNameOnShader);
     for (let i = 0; i < this.textures.length; i++)
-      this.textures[i].bind(i);
+      this.textures[i].bind(this.shader, i);
   } /* apply */
 } /* Material */

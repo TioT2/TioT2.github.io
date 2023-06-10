@@ -6,7 +6,6 @@ in vec3 inPosition;
 in vec2 inTexCoord;
 in vec3 inNormal;
 
-
 out vec3 drawPosition;
 out vec2 drawTexCoord;
 out vec3 drawNormal;

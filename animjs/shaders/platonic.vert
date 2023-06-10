@@ -3,8 +3,6 @@
 precision highp float;
 
 in vec3 inPosition;
-in vec2 inTexCoord;
-in vec3 inNormal;
 
 uniform cameraBuffer
 {

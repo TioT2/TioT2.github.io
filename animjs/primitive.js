@@ -1,6 +1,8 @@
 import {loadShader} from "./shader.js";
-import {Material} from "./material.js";
+import {Material, Texture, UBO} from "./material.js";
 import * as mth from "./mth.js";
+
+export {loadShader, Material, Texture, UBO, mth};
 
 export class Vertex {
   p;
@@ -23,8 +25,8 @@ export class Vertex {
 }; /* Vertex */
 
 export class Topology {
-  vtx = null;
-  idx = null;
+  vtx;
+  idx;
   type = Topology.TRIANGLES;
 
   static LINES          = WebGL2RenderingContext.LINES;
@@ -37,7 +39,7 @@ export class Topology {
   static TRIANGLE_STRIP = WebGL2RenderingContext.TRIANGLE_STRIP;
   static TRIANGLE_FAN   = WebGL2RenderingContext.TRIANGLE_FAN;
 
-  constructor(nvtx = [], nidx = []) {
+  constructor(nvtx = [], nidx = null) {
     this.vtx = nvtx;
     this.idx = nidx;
   } /* constructor */
@@ -47,12 +49,14 @@ export class Topology {
   } /* geometryTypeToGL */
 
   static square() {
-    return new Topology([
+    let tpl = new Topology([
       Vertex.fromCoord(-1, -1, 0, 0, 0),
       Vertex.fromCoord(-1,  1, 0, 0, 1),
       Vertex.fromCoord( 1, -1, 0, 1, 0),
       Vertex.fromCoord( 1,  1, 0, 1, 1)
     ], [0, 1, 2, 3]);
+    tpl.type = Topology.TRIANGLE_STRIP;
+    return tpl;
   } /* theTriangle */
 
   static #planeIndexed(width = 30, height = 30) {
@@ -254,16 +258,22 @@ export class Primitive {
 
     // Map vertex layout
     let positionLocation = gl.getAttribLocation(prim.material.shader, "inPosition");
-    gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 8 * 4, 0);
-    gl.enableVertexAttribArray(positionLocation);
+    if (positionLocation != -1) {
+      gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 8 * 4, 0);
+      gl.enableVertexAttribArray(positionLocation);
+    }
 
     let texCoordLocation = gl.getAttribLocation(prim.material.shader, "inTexCoord");
-    gl.vertexAttribPointer(texCoordLocation, 3, gl.FLOAT, false, 8 * 4, 3 * 4);
-    gl.enableVertexAttribArray(texCoordLocation);
+    if (texCoordLocation != -1) {
+      gl.vertexAttribPointer(texCoordLocation, 3, gl.FLOAT, false, 8 * 4, 3 * 4);
+      gl.enableVertexAttribArray(texCoordLocation);
+    }
 
     let normalLocation = gl.getAttribLocation(prim.material.shader, "inNormal");
-    gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 8 * 4, 5 * 4);
-    gl.enableVertexAttribArray(normalLocation);
+    if (normalLocation != -1) {
+      gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 8 * 4, 5 * 4);
+      gl.enableVertexAttribArray(normalLocation);
+    }
 
     // Create index buffer
     if (tpl.idx == null) {
