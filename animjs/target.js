@@ -25,11 +25,10 @@ export class Target {
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.FBO);
 
-    
     // create target textures
     let drawBuffers = [];
     for (let i = 0; i < attachmentCount; i++) {
-      this.attachments[i] = new Texture(gl, Texture.UNSIGNED_BYTE, 4);
+      this.attachments[i] = new Texture(gl, Texture.FLOAT, 4);
       drawBuffers.push(gl.COLOR_ATTACHMENT0 + i);
     }
     gl.drawBuffers(drawBuffers);
@@ -45,11 +44,37 @@ export class Target {
     gl.bindTexture(gl.TEXTURE_2D, this.depth.id);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, this.depth.id, 0);
 
-    // console.log(`Framebuffer status: ${decodeFramebufferStatus(gl.checkFramebufferStatus(gl.FRAMEBUFFER))}`);
+    console.log(`Framebuffer status: ${decodeFramebufferStatus(gl.checkFramebufferStatus(gl.FRAMEBUFFER))}`);
   } /* constructor */
 
   resize(size) {
-    throw Error("no Implementation");
+    let gl = this.gl;
+
+    this.size = size.copy();
+    this.FBO = gl.createFramebuffer();
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.FBO);
+
+    // create target textures
+    let drawBuffers = [];
+    for (let i = 0; i < this.attachments.length; i++) {
+      this.attachments[i] = new Texture(gl, Texture.FLOAT, 4);
+      drawBuffers.push(gl.COLOR_ATTACHMENT0 + i);
+    }
+    gl.drawBuffers(drawBuffers);
+
+    for (let i = 0; i < this.attachments.length; i++) {
+      gl.bindTexture(gl.TEXTURE_2D, this.attachments[i].id);
+      this.attachments[i].resize(this.size);
+  
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0 + i, gl.TEXTURE_2D, this.attachments[i].id, 0);
+    }
+    this.depth = new Texture(gl, Texture.DEPTH);
+    this.depth.resize(this.size);
+    gl.bindTexture(gl.TEXTURE_2D, this.depth.id);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, this.depth.id, 0);
+
+    console.log(`Framebuffer status: ${decodeFramebufferStatus(gl.checkFramebufferStatus(gl.FRAMEBUFFER))}`);
   } /* resize */
 
   bind() {

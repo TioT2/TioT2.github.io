@@ -66,6 +66,7 @@ uniform materialUBO {
   float roughness;
 };
 
+
 struct material {
   vec3 baseColor;
   float metallic;
@@ -86,20 +87,22 @@ void main() {
   outPosition = vec4(drawPosition, 1);
   outNormalShade = vec4(drawNormal, 0);
 
-  vec3 lightDirection = normalize(vec3(-1, 0, 0));
+  const vec3 lightDirection = normalize(vec3(-1, 0, 0));
   vec3 cameraDirection = normalize(cameraLocation.xyz - drawPosition);
   vec3 normal = normalize(drawNormal);
 
-  vec3 F0 = mix(vec3(0), baseColor, vec3(metallic));
-  vec3 albedo = mix(baseColor, vec3(0.04), vec3(metallic));
+  material mtl = getMaterial();
+
+  vec3 F0 = mix(vec3(0), mtl.baseColor, vec3(mtl.metallic));
+  vec3 albedo = mix(mtl.baseColor, vec3(0.04), vec3(mtl.metallic));
 
   // shading
-  outDiffuse = vec4(shade(lightDirection, normal, cameraDirection, roughness, F0, albedo), 1);
+  outDiffuse = vec4(shade(lightDirection, normal, cameraDirection, mtl.roughness, F0, albedo), 1);
 
   // tonal compression
   outDiffuse = outDiffuse / (vec4(1.0) + outDiffuse);
 
-  // 
+  // gamma correction
   outDiffuse = pow(outDiffuse, vec4(1.0 / 2.2));
 } /* main */
 

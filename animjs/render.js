@@ -15,7 +15,18 @@ export class Render {
   constructor() {
     // WebGL initialization
     let canvas = document.getElementById("glCanvas");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     let gl = canvas.getContext("webgl2");
+    if (gl == null) {
+      throw Error("Can't initialize WebGL2");
+    }
+
+    let extensions = ["EXT_color_buffer_float", "OES_texture_float_linear"];
+    for (let i = 0; i < extensions.length; i++)
+      if (gl.getExtension(extensions[i]) == null)
+        throw Error(`"${extensions[i]}" extension required`);
 
     this.gl = gl;
 
@@ -27,13 +38,27 @@ export class Render {
     this.cameraUBO = new UBO(this.gl);
 
     this.camera.resize(new mth.Size(canvas.width, canvas.height));
-    gl.viewport(0, 0, canvas.width, canvas.height);
 
     // targets setup
-    let size = new mth.Size(800, 600);
+    let size = new mth.Size(canvas.width, canvas.height);
     this.target = new Target(gl, 3);
 
+    this.target.resize(size);
     Target.default(gl).resize(size);
+
+    // resize handling
+    window.onresize = () => {
+      let resolution = new mth.Size(window.innerWidth, window.innerHeight);
+
+      canvas.width = resolution.w;
+      setTimeout(() => {
+        canvas.height = resolution.h;
+      }, 0);
+
+      this.camera.resize(resolution);
+      this.target.resize(resolution);
+      Target.default(gl).resize(resolution);
+    };
   } /* constructor */
 
   drawPrimitive(primitive, transform = mth.Mat4.identity()) {

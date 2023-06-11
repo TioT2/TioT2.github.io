@@ -2,8 +2,6 @@ import * as tcgl from "./system.js";
 import * as mth from "./mth.js";
 import * as platonic_bodies from "./units/platonic_bodies.js";
 
-import {Model} from "./model.js";
-
 let system = new tcgl.System();
 
 // platonic bodies unit
@@ -14,18 +12,13 @@ system.addUnit(async function() {
 
   let prims = [];
 
-  let f0s = [
-    new mth.Vec3(0.04, 0.04, 0.04),
-    new mth.Vec3(0.24, 0.24, 0.24),
-    new mth.Vec3(1.00, 0.86, 0.56)
-  ];
   let kds = [
     new mth.Vec3(0.47, 0.78, 0.73),
     new mth.Vec3(0.86, 0.18, 0.00),
-    new mth.Vec3(0.01, 0.01, 0.01)
+    new mth.Vec3(0.01, 0.01, 0.01),
   ];
 
-  for (let fi = 0; fi < 3; fi++) {
+  for (let fi = 0; fi < kds.length; fi++) {
     for (let i = 0; i < 7; i++) {
       let mtl = await system.render.createMaterial(shd);
       let prim = await system.render.createPrimitive(tpl, mtl);
@@ -35,12 +28,12 @@ system.addUnit(async function() {
         kds[fi].x, kds[fi].y, kds[fi].z,
         i / 7,
         i / 7 + 0.05,
-    ]));
+      ]));
       mtl.uboNameOnShader = "materialUBO";
 
       prims.push({
         primitive: prim,
-        transform: mth.Mat4.translate(new mth.Vec3((i - 3.0) * 2.40, (1.5 - fi) * 2.40, 0))
+        transform: mth.Mat4.translate(new mth.Vec3((i - 3.0) * 2.40, (kds.length / 2 - fi) * 2.40, 0))
       });
     }
   }
@@ -136,17 +129,17 @@ system.addUnit(function() {
   return camera;
 });
 
-// FPS controller unit
-system.addUnit(function() {
-  let u = {
-    text: document.getElementById("FPS"),
-    response: function() {
-      u.text.innerText = `FPS: ${system.timer.fps}`;
-    }
-  };
+// // FPS controller unit
+// system.addUnit(function() {
+//   let u = {
+//     text: document.getElementById("FPS"),
+//     response: function() {
+//       u.text.innerText = `FPS: ${system.timer.fps}`;
+//     }
+//   };
 
-  return u;
-});
+//   return u;
+// });
 
 system.run();
 
