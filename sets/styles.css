@@ -1,9 +1,10 @@
 :root {
-  color: #4C77CC;
+  --text-color: #4C77CC;
+  --border-color: #4C77CC;
 }
 
 .header {
-  color       : var(--color);
+  color       : var(--text-color);
   font-weight : bold;
   font-size   : xx-large;
   font-family : 'Consolas';
@@ -29,14 +30,14 @@
 }
 
 .typeOption {
-  color       : var(--color);
+  color       : #4C77CC;
   font-weight : medium;
   font-size   : smaller;
   font-family : 'Consolas';
 }
 
 .text {
-  color       : var(--color);
+  color       : #4C77CC;
   font-weight : bolder;
   font-size   : medium;
   font-family : 'Consolas';

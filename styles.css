@@ -1,0 +1,17 @@
+h1 {
+  font-family: "Consolas";
+  font-size: xx-large;
+  font-weight: bold;
+  color: #4C77CC;
+}
+
+li {
+  list-style-type: armenian;
+  font-family: "Consolas";
+  color: #4C77CC;
+  font-weight: bold;
+}
+
+a {
+  font-weight: bolder;
+}
