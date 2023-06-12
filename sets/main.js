@@ -71,24 +71,22 @@ async function initPrimitive() {
   gl.enableVertexAttribArray(posLoc);
 } /* initPrimitive */
 
-export async function init() {
-  // WebGL initialization
-  canvas = document.getElementById("glCanvas");
-  gl = canvas.getContext("webgl2");
+// WebGL initialization
+canvas = document.getElementById("glCanvas");
+gl = canvas.getContext("webgl2");
 
-  await sets.init(gl);
-  sets.bind("Mandelbrot");
-  await initPrimitive();
+await sets.init(gl);
+sets.bind("Mandelbrot");
+await initPrimitive();
 
-  // configure set selector
-  let select = document.getElementById("setTypeSelector");
-  let heading = document.getElementById("heading");
-  select.addEventListener("change", (Element, Event) => {
-    sets.bind(select.value);
-    heading.innerHTML = `The ${select.value} set`;
-  });
+// configure set selector
+let select = document.getElementById("setTypeSelector");
+let heading = document.getElementById("heading");
+select.addEventListener("change", (Element, Event) => {
+  sets.bind(select.value);
+  heading.innerHTML = `The ${select.value} set`;
+});
 
-  camera.init(canvas);
+camera.init(canvas);
 
-  window.requestAnimationFrame(render);
-} /* init */
+window.requestAnimationFrame(render);
