@@ -4,74 +4,33 @@ import * as platonic_bodies from "./units/platonic_bodies.js";
 
 let system = new tcgl.System();
 
-// platonic bodies unit
+system.addUnit(platonic_bodies.create);
 
 system.addUnit(async function() {
-  let tpl = await tcgl.rnd.Topology.sphere();
-  let shd = await system.render.createShader("./shaders/default_pbr");
+  let tpl = await tcgl.rnd.Topology.model_obj("./models/headcrab/headcrab.obj");
+  let mtl = await system.render.createMaterial("./shaders/default");
+  let tex = system.render.createTexture();
+  tex.load("./models/headcrab/diffuse.png");
+  mtl.textures.push(tex);
 
-  let prims = [];
+  let prim = await system.render.createPrimitive(tpl, mtl);
 
-  let kds = [
-    new mth.Vec3(0.47, 0.78, 0.73),
-    new mth.Vec3(0.86, 0.18, 0.00),
-    new mth.Vec3(0.01, 0.01, 0.01),
-  ];
-
-  for (let fi = 0; fi < kds.length; fi++) {
-    for (let i = 0; i < 7; i++) {
-      let mtl = await system.render.createMaterial(shd);
-      let prim = await system.render.createPrimitive(tpl, mtl);
-      mtl.ubo = system.render.createUniformBuffer();
-
-      mtl.ubo.writeData(new Float32Array([
-        kds[fi].x, kds[fi].y, kds[fi].z,
-        i / 7,
-        i / 7 + 0.05,
-      ]));
-      mtl.uboNameOnShader = "materialUBO";
-
-      prims.push({
-        primitive: prim,
-        transform: mth.Mat4.translate(new mth.Vec3((i - 3.0) * 2.40, (kds.length / 2 - fi) * 2.40, 0))
-      });
-    }
-  }
+  // let mdl = new Model(system.render.gl);
+  // await mdl.loadGLTF("./models/telephone");
+  let transform = mth.Mat4.translate(new mth.Vec3(5, 0, -12));
 
   return {
     response(system) {
-      for (let i = 0; i < prims.length; i++) {
-        system.render.drawPrimitive(prims[i].primitive, prims[i].transform);
-      }
+      system.render.drawPrimitive(prim, transform);
+      // system.render.drawPrimitive(mdl.primitives[0]);
     }
   };
 });
 
-// system.addUnit(async function() {
-//   let tpl = await tcgl.rnd.Topology.model_obj("./models/headcrab/headcrab.obj");
-//   let mtl = await system.render.createMaterial("./shaders/default");
-//   let tex = system.render.createTexture();
-//   tex.load("./models/headcrab/diffuse.png");
-//   mtl.textures.push(tex);
-
-//   let prim = await system.render.createPrimitive(tpl, mtl);
-
-//   let mdl = new Model(system.render.gl);
-//   await mdl.loadGLTF("./models/telephone");
-
-//   return {
-//     response(system) {
-//       system.render.drawPrimitive(prim);
-//       system.render.drawPrimitive(mdl.primitives[0]);
-//     }
-//   };
-// });
-
 // camera unit
 system.addUnit(function() {
   const up = new mth.Vec3(0, 1, 0);
-  // let loc = new mth.Vec3(-1.8, 2.1, 4.7), at = new mth.Vec3(4.66, -2, -2.40);
-  let loc = new mth.Vec3(0, 0, 20), at = new mth.Vec3(0, 0, 0);
+  let loc = new mth.Vec3(19.88, 11.67, 9.20), at = new mth.Vec3(8.90, 5.32, -4.65);
   let radius = at.sub(loc).length();
 
   let camera = {

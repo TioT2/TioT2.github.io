@@ -51,9 +51,7 @@ export class Render {
       let resolution = new mth.Size(window.innerWidth, window.innerHeight);
 
       canvas.width = resolution.w;
-      setTimeout(() => {
-        canvas.height = resolution.h;
-      }, 0);
+      canvas.height = resolution.h;
 
       this.camera.resize(resolution);
       this.target.resize(resolution);
@@ -129,7 +127,7 @@ export class Render {
 
     // rendering to screen framebuffer
     Target.default(gl).bind();
-    this.fsPrimitive.draw();
+    this.fsPrimitive.draw(this.cameraUBO);
   } /* end */
 } /* Render */
 
