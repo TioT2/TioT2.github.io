@@ -1,7 +1,7 @@
 // rollup main.js --file bundle.js --format iife
 export default [
   {
-    input: './animjs/main.js',
+    input: './animjs/src/main.js',
     output: {
       file: './animjs/bundle.js',
       format: 'es',
